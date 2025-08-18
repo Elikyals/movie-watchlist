@@ -6,7 +6,12 @@ const searchBoxEl = document.getElementById('search-box')
 
 formEl.addEventListener('submit', (e) => {
     e.preventDefault()
-    searchMovie(searchBoxEl.value)
+    if (searchBoxEl.value){
+        searchMovie(searchBoxEl.value)
+    }
+    else {
+        dataNotFound()
+    }
 })
 
 const searchMovie = (movie_name) => {
@@ -14,14 +19,19 @@ const searchMovie = (movie_name) => {
     fetch(`http://www.omdbapi.com/?s=${formatted_movie_name}&apikey=${API_KEY}`)
         .then(response => response.json())
         .then(data => {
-            const movieListID = data.Search.map((movieItem) => {
-                return movieItem.imdbID
-            })
-            const uniquemovieListID = movieListID.filter((value, index, array) => 
-                array.indexOf(value) === index)
-            const movieDetails = getMovieDetails(uniquemovieListID)
-            renderMovies(movieDetails)
-            
+            if (data.Response === 'False'){
+                dataNotFound()
+                searchBoxEl.value = ""
+            }
+            else{
+                const movieListID = data.Search.map((movieItem) => {
+                    return movieItem.imdbID
+                })
+                const uniquemovieListID = movieListID.filter((value, index, array) => 
+                    array.indexOf(value) === index)
+                const movieDetails = getMovieDetails(uniquemovieListID)
+                renderMovies(movieDetails)
+            }
         })
 
 }
@@ -56,4 +66,12 @@ const renderMovies = async (movieDetails) => {
             containerEl.classList.remove('center-items')
             containerEl.innerHTML = html    
             })
+}
+
+const dataNotFound = () => {
+    const html = `
+    <p>Unable to find what you’re looking for. Please try another search.</p>
+    `
+    containerEl.classList.add('center-items')
+    containerEl.innerHTML = html
 }
