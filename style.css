@@ -1,0 +1,142 @@
+:root {
+    --padding-left: 100px 
+}
+*{
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    padding: 0;
+    width: 1000px;
+    margin: 0 auto;
+    font-family: "Inter", sans-serif;
+    position: relative;
+
+}
+
+header {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/hero.png');
+    height: 210px;
+    background-size: cover;
+    background-position: center -300px;
+    display: flex;
+    align-items: center;
+    color: white;
+    justify-content: space-between;
+}
+header > h1 {
+    margin: 0;
+    padding: 0 var(--padding-left);
+    font-size: 2.5rem;
+}
+header > a {
+    padding: 0 var(--padding-left);
+    font-size: 1rem;
+}
+.center-items {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 480px;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #DFDDDD;
+}
+.movie-icon {
+    width: 80px;
+    height: 70px;
+}
+.search {
+    width: max-content;
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    position: absolute;
+    top: 180px;
+    left: var(--padding-left);
+    background: white
+    /* transition: box-shadow 0.25s; */
+}
+.search:focus-within{
+    background: #f9f8f8;
+    /* box-shadow: 0 0 2px rgba(0, 0, 0, 0.75); */
+}
+.search-input {
+    font-size: 16px;
+    color: #333;
+    margin-left: 12px;
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 670px;
+}
+.search-btn {
+    font-size: 16px;
+    border: none;
+    outline: none;
+    background: transparent;
+    cursor: pointer;
+    padding-left: 14px;
+}
+.search-btn:hover {
+    font-weight: bolder;
+}
+.search-input::placeholder,
+.search-icon {
+    color: rgba(0, 0, 0, 0.5);
+}
+.vline {
+    border-left: 1px solid #d1d5db;
+    height: 30px;
+}
+
+.container {
+    margin: 80px var(--padding-left) 0 var(--padding-left);
+}
+.movie {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 15px;
+}
+.movie-cover {
+    width: 100px;
+    height: 150px;
+}
+.movie-details {
+    padding-top: 10px;
+}
+.movie-meta {
+    display: flex;
+    align-items: center;
+    color: #111827;
+    font-size: 12px;
+    gap: 20px;
+    padding-bottom: 10px;
+}
+.movie-meta > p, .movie-meta > a {
+    margin: 0;
+}
+.movie-description {
+    color: #6B7280;
+    font-size: 14px;
+    margin: 0;
+}
+.movie-title {
+    font-size: 18px;
+    margin: 0;
+}
+
+.movie-meta > a {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+hr {
+    height: 1px;
+    background-color: #d1d5db;
+    border: none;
+}

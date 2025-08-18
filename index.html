@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="style.css" rel="stylesheet">
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+        <!-- Icons -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=search" />
+    </head>
+    <body>
+        <header>
+            <h1>Find your film</h1>
+            <a>My Watchlist</a>
+        </header>
+        <main>
+            <form>
+                <div class="search">
+                    <span class="search-icon material-symbols-outlined">search</span>
+                    <input class="search-input" type="search" placeholder="Search for a movie">
+                    <div class="vline"></div>
+                    <input class="search-btn" type="submit" value="Search">
+                </div>
+            </form>
+            <!-- <div class="container center-items">
+                <img class="movie-icon"src="images\Icon.png" alt="movie icon">
+                <p>Start exploring</p>
+            </div> -->
+            <div class="container">
+                <div class="movie">
+                    <img class="movie-cover"src="images\blade-runner.png" alt="Blade Runner Cover">
+                    <div class="movie-details">
+                        <h3 class="movie-title">Blade Runner</h3>
+                        <div class="movie-meta">
+                            <p>117 min</p>
+                            <p>Action, Drama, Sci-fi</p>
+                            <a><img src="images\add_circle.svg">Watchlist</a>
+                        </div>
+                        <p class="movie-description">A blade runner must pursue and terminate four replicants who stole a ship in space, and have returned to Earth to find their creator.</p>
+                    </div>
+                    <!-- <div class="hdivider"></div> -->
+                </div>
+                <hr>
+
+            </div>
+        </main>
+        <script src="index.js" type="module"></script>
+    </body>
+</html>
