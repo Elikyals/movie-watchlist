@@ -94,12 +94,12 @@ header > a {
 }
 
 .container {
-    margin: 80px var(--padding-left) 0 var(--padding-left);
+    margin: 60px var(--padding-left) 0 var(--padding-left);
 }
 .movie {
     display: flex;
     gap: 20px;
-    padding-bottom: 15px;
+    padding: 15px 0;
 }
 .movie-cover {
     width: 100px;
@@ -139,4 +139,10 @@ hr {
     height: 1px;
     background-color: #d1d5db;
     border: none;
+}
+
+.movie-ratings {
+    font-size: 14px;
+    padding-left: 15px;
+    font-weight: 400;
 }
