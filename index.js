@@ -1,22 +1,64 @@
 import { API_KEY } from './config.js'
 
-const containerEl = document.getElementById('container')
-const formEl = document.getElementById('search-form')
-const searchBoxEl = document.getElementById('search-box')
-const watchlistcontainerEl = document.getElementById('watchlist-container')
-
-renderWatchList()
-
-formEl.addEventListener('submit', (e) => {
-    e.preventDefault()
-    if (searchBoxEl.value){
-        searchMovie(searchBoxEl.value)
+function getCurrentPage(){
+    const path = window.location.pathname.split('/').pop()
+    return path || 'index.html'
+}
+// =================SHARED/UTILITY FUNCTIONS============================
+const savingToLocalStorage = (obj)  => {
+    let storageBucket = retrieveFromLocalStorage()
+    if (storageBucket === null) {
+        storageBucket = []
     }
-    else {
-        dataNotFound()
-    }
-})
+    storageBucket.push(obj)
+    localStorage.setItem("movies", JSON.stringify(storageBucket))
 
+}
+
+function retrieveFromLocalStorage() {
+    const bucket = JSON.parse(localStorage.getItem('movies'))
+    return bucket
+}
+
+function removeFromLocalStorage(title) {
+    let storageBucket = retrieveFromLocalStorage()
+    const filteredStorageBucket = storageBucket.filter(movie => movie.title !== title)
+    localStorage.setItem("movies", JSON.stringify(filteredStorageBucket))
+}
+
+// =================INDEX PAGE FUNCTIONS============================
+function initializeIndexPage() {
+    const containerEl = document.getElementById('container')
+    const formEl = document.getElementById('search-form')
+    const searchBoxEl = document.getElementById('search-box')
+
+    if (formEl && searchBoxEl && containerEl) {
+        formEl.addEventListener('submit', (e) => {
+            e.preventDefault()
+            if (searchBoxEl.value) {
+                searchMovie(searchBoxEl.value)
+            }
+            else {
+                dataNotFound()
+            }
+        })
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('watchlist')) {
+                const movieSection = e.target.closest('.movie')
+                const movieItem = {
+                    poster: movieSection.querySelector('.movie-cover').src,
+                    title: movieSection.querySelector('.movie-title').textContent.split('⭐').shift(),
+                    imdbRating: movieSection.querySelector('.movie-ratings').textContent.split('⭐').pop(),
+                    runtime: movieSection.querySelector('.runtime').textContent,
+                    genre: movieSection.querySelector('.genre').textContent,
+                    plot: movieSection.querySelector('.movie-description').textContent
+                }
+                savingToLocalStorage(movieItem)
+            }
+        })
+    }
+
+}
 
 const searchMovie = (movie_name) => {
     const formatted_movie_name = movie_name.replaceAll(" ", "+")
@@ -49,6 +91,7 @@ const getMovieDetails = async (arrMovieListID) => {
 }
 
 const renderMovies = async (movieDetails) => {
+    const containerEl = document.getElementById('container')
     movieDetails.then(details => {
             const html = details.map((detail) =>{
                     return `
@@ -73,6 +116,7 @@ const renderMovies = async (movieDetails) => {
 }
 
 const dataNotFound = () => {
+    const containerEl = document.getElementById('container')
     const html = `
     <p>Unable to find what you’re looking for. Please try another search.</p>
     `
@@ -80,38 +124,39 @@ const dataNotFound = () => {
     containerEl.innerHTML = html
 }
 
-// WatchList
-document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('watchlist')){
-        const movieSection = e.target.closest('.movie')
-        const movieItem = {
-            poster: movieSection.querySelector('.movie-cover').src,
-            title: movieSection.querySelector('.movie-title').textContent.split('⭐').shift(),
-            imdbRating: movieSection.querySelector('.movie-ratings').textContent.split('⭐').pop(),
-            runtime: movieSection.querySelector('.runtime').textContent,
-            genre: movieSection.querySelector('.genre').textContent,
-            plot: movieSection.querySelector('.movie-description').textContent
+// =================WATCHLIST PAGE FUNCTIONS============================
+
+function initializeWatchlistPage() {
+    const watchlistcontainerEl = document.getElementById('watchlist-container')
+
+    if (watchlistcontainerEl) {
+        renderWatchList(watchlistcontainerEl)
+    }
+
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('remove')) {
+            const movieSection = e.target.closest('.movie')
+            const title = movieSection.querySelector('.movie-title').textContent.split('⭐').shift()
+            removeFromLocalStorage(title)
         }
-        savingToLocalStorage(movieItem)
-    }
-})
-
-const savingToLocalStorage = (obj)  => {
-    let storageBucket = retrieveFromLocalStorage()
-    if (storageBucket === null) {
-        storageBucket = []
-    }
-    storageBucket.push(obj)
-    localStorage.setItem("movies", JSON.stringify(storageBucket))
-
+        const storageBucket = retrieveFromLocalStorage()
+        console.log(storageBucket.length)
+        if (Number(storageBucket) !== 0){
+            renderWatchList(watchlistcontainerEl)
+        } else {
+            renderWatchListStartPage(watchlistcontainerEl)
+        }
+    })
 }
-
-function retrieveFromLocalStorage() {
-    const bucket = JSON.parse(localStorage.getItem('movies'))
-    return bucket
+function renderWatchListStartPage (watchlistcontainerEl) {
+    const html = `
+        <p class="watchlist-txt">Your watchlist is looking a little empty...</p>
+        <a href="index.html" class="add-movie-redirect"><img src="images/add_circle.svg">Let's add some movies!</a>
+        `
+    watchlistcontainerEl.classList.add('center-items')
+    watchlistcontainerEl.innerHTML = html
 }
-
-function renderWatchList() {
+function renderWatchList(watchlistcontainerEl) {
     const bucket = retrieveFromLocalStorage()
     if (bucket !== null) {
         const html = bucket.map((movie) => {
@@ -123,7 +168,7 @@ function renderWatchList() {
                     <div class="movie-meta">
                         <p class="runtime">${movie.runtime}</p>
                         <p class="genre">${movie.genre}</p>
-                        <button><img src="images/remove_circle.svg">Remove</button>
+                        <button class="remove"><img src="images/remove_circle.svg">Remove</button>
                     </div>
                     <p class="movie-description">${movie.plot}</p>
                 </div>
@@ -135,4 +180,20 @@ function renderWatchList() {
         watchlistcontainerEl.innerHTML = html
     }
 }
+// =================MAIN INITIALIZATION============================
+function initializePage() {
+    const  currentPage = getCurrentPage()
 
+    switch (currentPage) {
+        case 'index.html':
+        case '':
+            initializeIndexPage()
+            break
+        case 'watchlist.html':
+            initializeWatchlistPage()
+            break
+    }
+}
+
+// =================PAGE LOAD EVENT============================
+document.addEventListener('DOMContentLoaded', initializePage)
