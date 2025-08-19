@@ -1,11 +1,11 @@
 import { API_KEY } from './config.js'
 
-function getCurrentPage(){
+function getCurrentPage() {
     const path = window.location.pathname.split('/').pop()
     return path || 'index.html'
 }
 // =================SHARED/UTILITY FUNCTIONS============================
-const savingToLocalStorage = (obj)  => {
+const savingToLocalStorage = (obj) => {
     let storageBucket = retrieveFromLocalStorage()
     if (storageBucket === null) {
         storageBucket = []
@@ -54,6 +54,7 @@ function initializeIndexPage() {
                     plot: movieSection.querySelector('.movie-description').textContent
                 }
                 savingToLocalStorage(movieItem)
+                // alert(`${movieItem.title} saved to watchlist`)
             }
         })
     }
@@ -65,15 +66,15 @@ const searchMovie = (movie_name) => {
     fetch(`http://www.omdbapi.com/?s=${formatted_movie_name}&apikey=${API_KEY}`)
         .then(response => response.json())
         .then(data => {
-            if (data.Response === 'False'){
+            if (data.Response === 'False') {
                 dataNotFound()
                 searchBoxEl.value = ""
             }
-            else{
+            else {
                 const movieListID = data.Search.map((movieItem) => {
                     return movieItem.imdbID
                 })
-                const uniquemovieListID = movieListID.filter((value, index, array) => 
+                const uniquemovieListID = movieListID.filter((value, index, array) =>
                     array.indexOf(value) === index)
                 const movieDetails = getMovieDetails(uniquemovieListID)
                 renderMovies(movieDetails)
@@ -93,8 +94,8 @@ const getMovieDetails = async (arrMovieListID) => {
 const renderMovies = async (movieDetails) => {
     const containerEl = document.getElementById('container')
     movieDetails.then(details => {
-            const html = details.map((detail) =>{
-                    return `
+        const html = details.map((detail) => {
+            return `
                     <div class="movie">
                         <img class="movie-cover" src="${detail.Poster}" alt="${detail.Title} Cover">
                         <div class="movie-details">
@@ -109,10 +110,10 @@ const renderMovies = async (movieDetails) => {
                     </div>
                     <hr>
                     `
-                }).join('')
-            containerEl.classList.remove('center-items')
-            containerEl.innerHTML = html    
-            })
+        }).join('')
+        containerEl.classList.remove('center-items')
+        containerEl.innerHTML = html
+    })
 }
 
 const dataNotFound = () => {
@@ -130,7 +131,12 @@ function initializeWatchlistPage() {
     const watchlistcontainerEl = document.getElementById('watchlist-container')
 
     if (watchlistcontainerEl) {
-        renderWatchList(watchlistcontainerEl)
+        const storageBucket = retrieveFromLocalStorage()
+        if (Number(storageBucket) !== 0) {
+            renderWatchList(watchlistcontainerEl)
+        } else {
+            renderWatchListStartPage(watchlistcontainerEl)
+        }
     }
 
     document.addEventListener('click', (e) => {
@@ -140,15 +146,14 @@ function initializeWatchlistPage() {
             removeFromLocalStorage(title)
         }
         const storageBucket = retrieveFromLocalStorage()
-        console.log(storageBucket.length)
-        if (Number(storageBucket) !== 0){
+        if (Number(storageBucket) !== 0) {
             renderWatchList(watchlistcontainerEl)
         } else {
             renderWatchListStartPage(watchlistcontainerEl)
         }
     })
 }
-function renderWatchListStartPage (watchlistcontainerEl) {
+function renderWatchListStartPage(watchlistcontainerEl) {
     const html = `
         <p class="watchlist-txt">Your watchlist is looking a little empty...</p>
         <a href="index.html" class="add-movie-redirect"><img src="images/add_circle.svg">Let's add some movies!</a>
@@ -182,7 +187,7 @@ function renderWatchList(watchlistcontainerEl) {
 }
 // =================MAIN INITIALIZATION============================
 function initializePage() {
-    const  currentPage = getCurrentPage()
+    const currentPage = getCurrentPage()
 
     switch (currentPage) {
         case 'index.html':
