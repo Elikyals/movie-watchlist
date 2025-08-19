@@ -32,6 +32,12 @@ header > h1 {
 header > a {
     padding: 0 var(--padding-left);
     font-size: 1rem;
+    text-decoration: none;
+    color: white;
+}
+
+header > a:hover {
+    font-weight: bolder;
 }
 .center-items {
     display: flex;
@@ -129,11 +135,13 @@ header > a {
     margin: 0;
 }
 
-.movie-meta > a {
+.movie-meta > button {
     display: flex;
     align-items: center;
     gap: 4px;
     cursor: pointer;
+    border: none;
+    background-color: transparent;
 }
 hr {
     height: 1px;
@@ -145,4 +153,24 @@ hr {
     font-size: 14px;
     padding-left: 15px;
     font-weight: 400;
+}
+
+
+/* Watchlist */
+.add-movie-redirect {
+    text-decoration: none;
+    color: #363636;
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.watchlist-txt {
+    margin: 0;
+    padding-bottom: 10px;
+}
+
+.reduce-space-top {
+    margin-top: 30px;
 }
