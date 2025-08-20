@@ -54,7 +54,6 @@ function initializeIndexPage() {
                     plot: movieSection.querySelector('.movie-description').textContent
                 }
                 savingToLocalStorage(movieItem)
-                console.log(retrieveFromLocalStorage())
                 // alert(`${movieItem.title} saved to watchlist`)
             }
         })
@@ -130,11 +129,9 @@ const dataNotFound = () => {
 
 function initializeWatchlistPage() {
     const watchlistcontainerEl = document.getElementById('watchlist-container')
-    console.log("Here")
 
     if (watchlistcontainerEl) {
         const storageBucket = retrieveFromLocalStorage()
-        console.log(storageBucket)
         if (Number(storageBucket) !== 0) {
             renderWatchList(watchlistcontainerEl)
         } else {
