@@ -54,6 +54,7 @@ function initializeIndexPage() {
                     plot: movieSection.querySelector('.movie-description').textContent
                 }
                 savingToLocalStorage(movieItem)
+                console.log(retrieveFromLocalStorage())
                 // alert(`${movieItem.title} saved to watchlist`)
             }
         })
@@ -63,7 +64,7 @@ function initializeIndexPage() {
 
 const searchMovie = (movie_name) => {
     const formatted_movie_name = movie_name.replaceAll(" ", "+")
-    fetch(`https://www.omdbapi.com/?s=${formatted_movie_name}&apikey=733ca94`)
+    fetch(`https://www.omdbapi.com/?s=${formatted_movie_name}&apikey=${API_KEY}`)
         .then(response => response.json())
         .then(data => {
             if (data.Response === 'False') {
@@ -84,7 +85,7 @@ const searchMovie = (movie_name) => {
 }
 const getMovieDetails = async (arrMovieListID) => {
     const promises = arrMovieListID.map(movieID =>
-        fetch(`https://www.omdbapi.com/?i=${movieID}&apikey=733ca94`)
+        fetch(`https://www.omdbapi.com/?i=${movieID}&apikey=${API_KEY}`)
             .then(response => response.json())
     );
     const movieDetails = await Promise.all(promises)
