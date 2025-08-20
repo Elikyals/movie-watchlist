@@ -194,10 +194,12 @@ function initializePage() {
 
     switch (currentPage) {
         case 'index.html':
+        case 'index':
         case '':
             initializeIndexPage()
             break
         case 'watchlist.html':
+        case 'watchlist':
             initializeWatchlistPage()
             break
     }
