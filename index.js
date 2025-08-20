@@ -130,9 +130,11 @@ const dataNotFound = () => {
 
 function initializeWatchlistPage() {
     const watchlistcontainerEl = document.getElementById('watchlist-container')
+    console.log("Here")
 
     if (watchlistcontainerEl) {
         const storageBucket = retrieveFromLocalStorage()
+        console.log(storageBucket)
         if (Number(storageBucket) !== 0) {
             renderWatchList(watchlistcontainerEl)
         } else {
